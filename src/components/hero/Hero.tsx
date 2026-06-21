@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
-import { ArrowDown, Download, Github, MapPin } from 'lucide-react';
+import { ArrowDown, Download, MapPin } from 'lucide-react';
+import { FaGithub } from 'react-icons/fa';
 import TopologyCanvas from './TopologyCanvas';
 import StatusBar from './StatusBar';
 import heroPhoto from '../../assets/hero.png';
@@ -141,13 +142,13 @@ export default function Hero() {
                 <Download size={16} />
                 Download Resume
               </a>
-              
+              <a
                 href="https://github.com/LEAKONO"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn-ghost"
               >
-                <Github size={16} />
+                <FaGithub size={16} />
                 GitHub
               </a>
             </motion.div>

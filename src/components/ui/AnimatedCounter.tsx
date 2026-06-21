@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import CountUp from 'react-countup';
 import { useInView } from '../../hooks/useInView';
 

@@ -23,8 +23,17 @@ export default function Navbar() {
 
   const handleNav = (href: string) => {
     setMenuOpen(false);
-    document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+    const id = href.replace('#', '');
+    const el = document.getElementById(id);
+    if (!el) return;
+    const top = el.getBoundingClientRect().top + window.scrollY - 72;
+    window.scrollTo({ top, behavior: 'smooth' });
   };
+
+  const baseClass = 'fixed top-0 left-0 right-0 z-50 transition-all duration-300';
+  const scrollClass = scrolled
+    ? baseClass + ' bg-[#080a0f]/90 backdrop-blur-xl border-b border-white/5'
+    : baseClass;
 
   return (
     <>
@@ -32,14 +41,9 @@ export default function Navbar() {
         initial={{ y: -80, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: 'easeOut' }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          scrolled
-            ? 'bg-[#080a0f]/90 backdrop-blur-xl border-b border-white/5'
-            : 'bg-transparent'
-        }`}
+        className={scrollClass}
       >
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-          {/* Logo */}
           <button
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             className="flex items-center gap-2 group"
@@ -47,12 +51,11 @@ export default function Navbar() {
             <div className="w-7 h-7 rounded bg-cyan-glow/10 border border-cyan-glow/30 flex items-center justify-center group-hover:bg-cyan-glow/20 transition-all">
               <Terminal size={14} className="text-cyan-glow" />
             </div>
-            <span className="font-mono text-sm font-700 text-white tracking-wider">
+            <span className="font-mono text-sm font-bold text-white tracking-wider">
               EL<span className="text-cyan-glow">.</span>dev
             </span>
           </button>
 
-          {/* Desktop nav */}
           <div className="hidden md:flex items-center gap-1">
             {NAV_ITEMS.map((item) => (
               <button
@@ -63,16 +66,16 @@ export default function Navbar() {
                 {item.label}
               </button>
             ))}
-            
+            <a
               href="/resume.pdf"
               download
-              className="ml-4 btn-primary !py-2 !px-4 !text-xs"
+              className="ml-4 btn-primary"
+              style={{ padding: '8px 16px', fontSize: '12px' }}
             >
               Resume
             </a>
           </div>
 
-          {/* Mobile toggle */}
           <button
             onClick={() => setMenuOpen(!menuOpen)}
             className="md:hidden text-[#8b949e] hover:text-white transition-colors p-2"
@@ -82,7 +85,6 @@ export default function Navbar() {
         </div>
       </motion.nav>
 
-      {/* Mobile menu */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div
@@ -101,10 +103,11 @@ export default function Navbar() {
                   {item.label}
                 </button>
               ))}
-              
+              <a
                 href="/resume.pdf"
                 download
-                className="mt-2 btn-primary !text-sm justify-center"
+                className="mt-2 btn-primary justify-center"
+                style={{ fontSize: '14px' }}
               >
                 Download Resume
               </a>

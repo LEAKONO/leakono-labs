@@ -23,8 +23,10 @@ export default function App() {
   }, []);
 
   return (
-    <div className="relative min-h-screen bg-graphite-950">
-      {/* Scroll progress bar */}
+    <div
+      className="relative min-h-screen bg-graphite-950"
+      style={{ overflowX: 'hidden', width: '100%', maxWidth: '100vw' }}
+    >
       <motion.div
         style={{
           scaleX,
@@ -38,10 +40,8 @@ export default function App() {
           transformOrigin: '0%',
         }}
       />
-
       <Navbar />
-
-      <main>
+      <main style={{ overflowX: 'hidden', width: '100%' }}>
         <Hero />
         <Architecture />
         <Projects />

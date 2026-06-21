@@ -14,7 +14,6 @@ import {
 import SectionLabel from '../ui/SectionLabel';
 import { DASHBOARD_METRICS } from '../../data/portfolio';
 import { useInView } from '../../hooks/useInView';
-import CountUp from 'react-countup';
 
 const ICON_MAP: Record<string, React.ElementType> = {
   Database,
@@ -53,37 +52,15 @@ const COMPETENCIES = [
 
 // Certification / achievement badges
 const ACHIEVEMENTS = [
-  {
-    label: 'Software Engineering',
-    issuer: 'Moringa School',
-    year: '2024',
-    color: '#00d4ff',
-    icon: Code2,
-  },
-  {
-    label: 'Web Development',
-    issuer: 'Power Learn Project',
-    year: '2025',
-    color: '#10b981',
-    icon: Terminal,
-  },
-  {
-    label: 'Data Engineering',
-    issuer: 'Self-Directed',
-    year: '2024',
-    color: '#8b5cf6',
-    icon: Database,
-  },
-  {
-    label: 'Full Stack Development',
-    issuer: 'Safaridesk Internship',
-    year: '2025',
-    color: '#f59e0b',
-    icon: Zap,
-  },
+  { label: 'Software Engineering', issuer: 'Moringa School', year: '2024', color: '#00d4ff', icon: Code2 },
+  { label: 'Web Development', issuer: 'Power Learn Project', year: '2025', color: '#10b981', icon: Terminal },
+  { label: 'Data Engineering', issuer: 'Self-Directed', year: '2024', color: '#8b5cf6', icon: Database },
+  { label: 'Full Stack Development', issuer: 'Safaridesk Internship', year: '2025', color: '#f59e0b', icon: Zap },
 ];
 
 // Animated stat counter card
+// TEST 1: CountUp removed entirely — replaced with plain numericValue
+// to isolate whether react-countup is the broken element.
 function StatCard({
   metric,
   index,
@@ -108,7 +85,6 @@ function StatCard({
                  hover:border-cyan-glow/20 transition-all duration-300
                  relative overflow-hidden group"
     >
-      {/* Background number watermark */}
       <div
         className="absolute -bottom-2 -right-2 font-mono font-black
                    text-6xl opacity-[0.04] group-hover:opacity-[0.07]
@@ -117,7 +93,6 @@ function StatCard({
         {metric.value}
       </div>
 
-      {/* Icon */}
       <div
         className="w-10 h-10 rounded-xl flex items-center justify-center mb-4"
         style={{
@@ -128,26 +103,15 @@ function StatCard({
         <Icon size={18} className="text-cyan-glow" />
       </div>
 
-      {/* Value */}
+      {/* TEST: plain number instead of <CountUp /> */}
       <div className="font-mono text-3xl font-black text-white mb-1">
-        {inView ? (
-          <CountUp
-            end={numericValue}
-            duration={2}
-            suffix={suffix}
-            decimals={0}
-          />
-        ) : (
-          '0'
-        )}
+        {inView ? `${numericValue}${suffix}` : '0'}
       </div>
 
-      {/* Label */}
       <div className="font-mono text-[11px] text-[#6e7681] tracking-widest uppercase">
         {metric.label}
       </div>
 
-      {/* Bottom glow line */}
       <div
         className="absolute bottom-0 left-0 right-0 h-px opacity-0
                    group-hover:opacity-100 transition-opacity duration-300"
@@ -180,7 +144,6 @@ function TelemetryRow({
                  group"
     >
       <div className="flex items-center gap-3">
-        {/* Blinking dot */}
         <div
           className="w-1.5 h-1.5 rounded-full shrink-0"
           style={{
@@ -194,10 +157,7 @@ function TelemetryRow({
           {item.label}
         </span>
       </div>
-      <span
-        className="font-mono text-xs font-600"
-        style={{ color: item.color }}
-      >
+      <span className="font-mono text-xs font-600" style={{ color: item.color }}>
         {item.value}
       </span>
     </motion.div>
@@ -225,10 +185,7 @@ function CompetencyBar({
                          transition-colors duration-200">
           {item.label}
         </span>
-        <span
-          className="font-mono text-xs font-600"
-          style={{ color: item.color }}
-        >
+        <span className="font-mono text-xs font-600" style={{ color: item.color }}>
           {item.value}%
         </span>
       </div>
@@ -237,22 +194,14 @@ function CompetencyBar({
           initial={{ width: 0 }}
           whileInView={{ width: `${item.value}%` }}
           viewport={{ once: true }}
-          transition={{
-            duration: 1.2,
-            delay: index * 0.06,
-            ease: 'easeOut',
-          }}
+          transition={{ duration: 1.2, delay: index * 0.06, ease: 'easeOut' }}
           className="h-full rounded-full relative overflow-hidden"
           style={{
             backgroundColor: item.color,
             boxShadow: `0 0 8px ${item.color}60`,
           }}
         >
-          {/* Shimmer effect */}
-          <div
-            className="absolute inset-0 flow-line"
-            style={{ opacity: 0.4 }}
-          />
+          <div className="absolute inset-0 flow-line" style={{ opacity: 0.4 }} />
         </motion.div>
       </div>
     </motion.div>
@@ -262,7 +211,6 @@ function CompetencyBar({
 export default function Metrics() {
   return (
     <section id="metrics" className="py-32 relative">
-      {/* Top divider */}
       <div
         className="absolute top-0 left-0 right-0 h-px"
         style={{
@@ -271,7 +219,6 @@ export default function Metrics() {
         }}
       />
 
-      {/* Background grid tint */}
       <div className="absolute inset-0 bg-grid opacity-30 pointer-events-none" />
 
       <div className="max-w-6xl mx-auto px-6 relative">
@@ -281,45 +228,34 @@ export default function Metrics() {
           subtitle="Real-time operational overview of skills, systems, and engineering output."
         />
 
-        {/* Stat cards grid */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 mb-12">
           {DASHBOARD_METRICS.map((metric, i) => (
             <StatCard key={metric.label} metric={metric} index={i} />
           ))}
         </div>
 
-        {/* Two column layout: telemetry + competencies */}
         <div className="grid lg:grid-cols-2 gap-6 mb-10">
-          {/* System Telemetry */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             className="glass rounded-2xl overflow-hidden border border-white/5"
           >
-            {/* Panel header */}
-            <div
-              className="flex items-center justify-between px-5 py-3
-                          border-b border-white/5 bg-white/[0.02]"
-            >
+            <div className="flex items-center justify-between px-5 py-3
+                          border-b border-white/5 bg-white/[0.02]">
               <div className="flex items-center gap-2">
                 <Activity size={13} className="text-cyan-glow" />
-                <span
-                  className="font-mono text-[10px] text-[#6e7681]
-                               tracking-widest uppercase"
-                >
+                <span className="font-mono text-[10px] text-[#6e7681]
+                               tracking-widest uppercase">
                   System Telemetry
                 </span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="status-dot" />
-                <span className="font-mono text-[10px] text-cyan-glow">
-                  LIVE
-                </span>
+                <span className="font-mono text-[10px] text-cyan-glow">LIVE</span>
               </div>
             </div>
 
-            {/* Telemetry rows */}
             <div className="scan-line">
               {TELEMETRY.map((item, i) => (
                 <TelemetryRow key={item.label} item={item} index={i} />
@@ -327,7 +263,6 @@ export default function Metrics() {
             </div>
           </motion.div>
 
-          {/* Competency bars */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -335,17 +270,12 @@ export default function Metrics() {
             transition={{ delay: 0.1 }}
             className="glass rounded-2xl overflow-hidden border border-white/5"
           >
-            {/* Panel header */}
-            <div
-              className="flex items-center justify-between px-5 py-3
-                          border-b border-white/5 bg-white/[0.02]"
-            >
+            <div className="flex items-center justify-between px-5 py-3
+                          border-b border-white/5 bg-white/[0.02]">
               <div className="flex items-center gap-2">
                 <Cpu size={13} className="text-cyan-glow" />
-                <span
-                  className="font-mono text-[10px] text-[#6e7681]
-                               tracking-widest uppercase"
-                >
+                <span className="font-mono text-[10px] text-[#6e7681]
+                               tracking-widest uppercase">
                   Skill Proficiency
                 </span>
               </div>
@@ -362,7 +292,6 @@ export default function Metrics() {
           </motion.div>
         </div>
 
-        {/* Achievements / Certifications */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -370,15 +299,11 @@ export default function Metrics() {
           transition={{ delay: 0.2 }}
           className="glass rounded-2xl overflow-hidden border border-white/5"
         >
-          <div
-            className="flex items-center gap-2 px-5 py-3
-                        border-b border-white/5 bg-white/[0.02]"
-          >
+          <div className="flex items-center gap-2 px-5 py-3
+                        border-b border-white/5 bg-white/[0.02]">
             <Shield size={13} className="text-cyan-glow" />
-            <span
-              className="font-mono text-[10px] text-[#6e7681]
-                           tracking-widest uppercase"
-            >
+            <span className="font-mono text-[10px] text-[#6e7681]
+                           tracking-widest uppercase">
               Qualifications & Experience
             </span>
           </div>
@@ -407,10 +332,7 @@ export default function Metrics() {
                   >
                     <Icon size={16} style={{ color: ach.color }} />
                   </div>
-                  <p
-                    className="font-mono text-xs font-600 mb-1"
-                    style={{ color: ach.color }}
-                  >
+                  <p className="font-mono text-xs font-600 mb-1" style={{ color: ach.color }}>
                     {ach.label}
                   </p>
                   <p className="text-[#8b949e] text-xs mb-1">{ach.issuer}</p>

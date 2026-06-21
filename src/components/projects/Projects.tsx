@@ -96,7 +96,7 @@ export default function Projects() {
               Full source code, README documentation, and architecture diagrams.
             </p>
           </div>
-          
+          <a
             href="https://github.com/LEAKONO"
             target="_blank"
             rel="noopener noreferrer"
